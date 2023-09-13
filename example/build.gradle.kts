@@ -59,7 +59,7 @@ val proguardFile: File
     get() = project.file(project.properties["proguard"].toString())
 
 val apiLevel = 34
-val minLevel = 26
+val minLevel = 34
 
 val dexByR8 = tasks.register("dexByR8", CompileR8::class.java, Mode.R8)
 dexByR8.configure {
