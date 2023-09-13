@@ -114,6 +114,17 @@ desugarMinfied.configure {
     )
 }
 
+val instrumentedJars: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
+artifacts {
+    add("instrumentedJars", desugarMinfied.map { it.output }) {
+        builtBy(desugarMinfied)
+    }
+}
+
 fun R8CompileDsl.emitRecordAnnotations() =
     this.javaForkOptions {
         systemProperty("com.android.tools.r8.emitRecordAnnotationsInDex", true)

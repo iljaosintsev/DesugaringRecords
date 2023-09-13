@@ -32,8 +32,24 @@ java {
     }
 }
 
+val instrumentedClasspath: Configuration by configurations.creating {
+    isCanBeConsumed = false
+}
+
+configurations.implementation.configure {
+    extendsFrom(instrumentedClasspath)
+}
+
 dependencies {
-    // implementation(project(":example"))
+
+    /*
+    val exampleInstrumentedJars = mapOf(
+        "path" to ":example",
+        "configuration" to "instrumentedJars"
+    )
+    // compile error, it's ok by design R8
+    instrumentedClasspath(project(exampleInstrumentedJars))
+    */
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
