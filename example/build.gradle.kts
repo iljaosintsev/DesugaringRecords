@@ -58,15 +58,18 @@ val buildToolsVersion = "34.0.0"
 val proguardFile: File
     get() = project.file(project.properties["proguard"].toString())
 
+val apiLevel = 34
+val minLevel = 26
+
 val dexByR8 = tasks.register("dexByR8", CompileR8::class.java, Mode.R8)
 dexByR8.configure {
     backend {
         compiler = CompilerVariant.BuildTools(buildToolsVersion)
-        platform = PlatformVariant.Android(34)
+        platform = PlatformVariant.Android(apiLevel)
     }
     // enableClassFileMode() make error,
     // android runtime doesn't know about StringConcatFactory
-    enableMinApi(26)
+    enableMinApi(minLevel)
     // emitRecordAnnotations() // required for invoke-custom, save java.lang.Record into bytecode
     classpath(
         configurations.runtimeClasspath.map { it.files }
@@ -102,9 +105,9 @@ val desugarMinfied = tasks.register("desugarMinfied", CompileR8::class.java, Mod
 desugarMinfied.configure {
     backend {
         buildTools(buildToolsVersion)
-        compileSdk(34)
+        compileSdk(apiLevel)
     }
-    compileMode(isClassFile = true, minApi = 26)
+    compileMode(isClassFile = true, minApi = minLevel)
     emitRecordAnnotations()
     target.set(
         minifyWithR8.flatMap { it.output } // r8 -> d8
